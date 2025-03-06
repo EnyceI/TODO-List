@@ -1,0 +1,3 @@
+C:/Users/ienyc/CLionProjects/TO-DOLIST/cmake-build-debug/CMakeFiles/TO_DOLIST.dir
+C:/Users/ienyc/CLionProjects/TO-DOLIST/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ienyc/CLionProjects/TO-DOLIST/cmake-build-debug/CMakeFiles/rebuild_cache.dir
