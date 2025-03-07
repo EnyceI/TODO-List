@@ -1,5 +1,8 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 void menu() {
     cout<<"TO-DO LIST:\n";
@@ -23,6 +26,21 @@ public:
 
     void displayTask() const {
         cout<<"Title: "<<title<<"\n"<<"Description: "<<description<<"\n"<<"Category: "<<category<<"\n"<<"Due date: "<<dueDate<<"\n"<<"Priority:"<<priority<<"\n";
+    }
+    int getPriority() const {
+        return priority;
+    }
+    string getTitle()const {
+        return title;
+    }
+    string getDescription()const {
+        return description;
+    }
+    string getCategory()const {
+        return category;
+    }
+    string getDuedate()const {
+        return dueDate;
     }
 
 private:
@@ -49,8 +67,61 @@ void addTask() {
     cin>>priority;
     cin.ignore();
     tasks.push_back(Task(ti,description,category,duedate,priority));
-    cout<<"Added Successfully";
+    cout<<"Added Successfully\n";
 
+}
+
+void listTasks() {
+     if(tasks.empty()) {
+         cout<<"No tasks available !\n";
+         return;
+     }
+    sort(tasks.begin(),tasks.end(),[](const  Task &a, const Task &b) {
+        return  a.getPriority()<b.getPriority();
+    });
+    for (size_t i=0; i< tasks.size();++i) {
+        cout<<i+1<<".";
+        tasks[i].displayTask();
+    }
+}
+void removeTask() {
+    listTasks();
+    if (tasks.empty()) {
+        cout<<"No tasks available";
+    }
+    int num;
+    cout<<"Enter task number to be deleted:";
+    cin>>num;
+    if (num<1 || num> tasks.size()) {
+        cout<<"Invalid number\n";
+    }
+    tasks.erase(tasks.begin() +(num-1));
+    cout<<"Task removed successfully!\n";
+}
+const  string FILE_NAME="tasks.txt";
+void saveFile() {
+    ofstream file(FILE_NAME);
+    for( const auto &task:tasks) {
+        file<<task.getTitle()<<","<<task.getDescription()<<","<<task.getCategory()<<","<<task.getDuedate()<<","<<task.getPriority()<<"\n";
+
+    }
+    file.close();
+}
+void loadFile() {
+    ifstream file(FILE_NAME);
+        if(!file) return;
+        string line;
+    while(getline(file,line)){
+        stringstream ss(line);
+        string title,description,category,duedate,priority;
+        getline(ss,title,',');
+        getline(ss, description, ',');
+        getline(ss, category, ',');
+        getline(ss, duedate, ',');
+        getline(ss, priority, ',');
+        tasks.push_back(Task(title,description,category,duedate,stoi(priority)));
+    }
+    file.close();
 }
 int main()
 {   //INPUT CHOICE AND VALIDATE
@@ -82,6 +153,8 @@ int main()
     task1.displayTask();
     //TESTING VECTOR AND ADDING
     addTask();
+    addTask();
+    listTasks();
 
 
     return 0;
